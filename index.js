@@ -102,13 +102,65 @@ function cropImage() {
   draw();
 }
 
-function draw() {
-  var canvas = document.getElementById("canvas");
-  var ctx = canvas.getContext("2d");
-  ctx.font = " 40px Roboto";
-  ctx.textAlign = "center, 320/690";
-  ctx.fillStyle = 'black';
 
+function draw() {
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    ctx.font = "40px Roboto";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffffff";
+
+    // Draw image
+    ctx.drawImage(
+        document.getElementById("croppedImage"),
+        90,
+        194,
+        452,
+        430
+    );
+
+    // Draw frame
+    ctx.drawImage(document.getElementById("frame"), 0, 0);
+
+    // Username
+    const username = document.getElementById("username").value.trim();
+
+    if (username.length >= 10 && username.length <= 15) {
+
+        // Find the nearest space around the middle
+        let middle = Math.floor(username.length / 2);
+        let leftSpace = username.lastIndexOf(" ", middle);
+        let rightSpace = username.indexOf(" ", middle);
+
+        let splitPosition;
+
+        if (leftSpace === -1) {
+            splitPosition = rightSpace;
+        } else if (rightSpace === -1) {
+            splitPosition = leftSpace;
+        } else {
+            // Choose the closest space
+            splitPosition =
+                (middle - leftSpace <= rightSpace - middle)
+                    ? leftSpace
+                    : rightSpace;
+        }
+
+        if (splitPosition > 0) {
+            const firstLine = username.substring(0, splitPosition).trim();
+            const secondLine = username.substring(splitPosition).trim();
+
+            ctx.fillText(firstLine, 145, 665);
+            ctx.fillText(secondLine, 145, 710);
+        } else {
+            ctx.fillText(username, 145, 690);
+        }
+
+    } else {
+        ctx.fillText(username, 145, 690);
+    }
+}
   // Draw slice
   ctx.drawImage(
     document.getElementById("croppedImage"),
