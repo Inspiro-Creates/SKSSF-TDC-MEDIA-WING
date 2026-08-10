@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 // console.log("coucou");
 const uploadedImageDiv = document.getElementById("uploadedImage");
@@ -22,8 +23,8 @@ function getImage() {
   newImg.id = "myGreatImage";
   // uploadedImageDiv.style.border = "4px solid #FCB514";
   // uploadedImageDiv.innerHTML
-  uploadedImageDiv.style.width = "345px";
-  uploadedImageDiv.style.height = "370px";
+  uploadedImageDiv.style.width = " 250px";
+  uploadedImageDiv.style.height = "250px";
   uploadedImageDiv.appendChild(newImg);
   myGreatImage = document.getElementById("myGreatImage");
 
@@ -47,8 +48,8 @@ function processImage() {
     // minCropBoxWidth:200,
     // minCropBoxHeight:200,
     //cropBoxMovable: false,
-    // minContainerHeight  : 400,
-    // minContainerWidth   : 400,
+    // minContainerHeight  : 300,
+    // minContainerWidth   : 300,
     // minCanvasWidth      : 200,
     // minCanvasHeight     : 200,
     // maxCropBoxWidth     : 100,
@@ -57,7 +58,7 @@ function processImage() {
     // maxContainerWidth   : 200,
     // maxCanvasWidth      : 200,
     // maxCanvasHeight     : 200,
-    aspectRatio:  345/370,  
+    aspectRatio:  452/430,  
     autoCropArea: 1,
     background: true,
     movable: false,
@@ -79,8 +80,8 @@ function processImage() {
     viewMode: 2,
 
     data: {
-      width: 1025,
-      height:1025,
+      width: 1080,
+      height:1386,
     },
     crop(event) {
       console.log(
@@ -104,38 +105,45 @@ function cropImage() {
 function draw() {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
-  ctx.font = " 28px Roboto";
+  ctx.font = " 70px Roboto";
   ctx.textAlign = "center";
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = 'black';
 
   // Draw slice
   ctx.drawImage(
     document.getElementById("croppedImage"),
-    656,
-    272,
-    345,
-    370
+   90,
+    194,
+    452,
+    430
     // 900,
     // 0,
-    // 1500,
-    // 1500
+    // 900,
+    // 900
   );
 
   // Draw frame
   ctx.drawImage(document.getElementById("frame"), 0, 0);
-  ctx.fillText(document.getElementById("username").value, 829, 703);
+  ctx.fillText(document.getElementById("username").value, 223, 655);
 }
 
 // downlad function
 
+let downloadCount = Number(localStorage.getItem("downloadCount")) || 0;
+
 function download() {
-  var download = document.getElementById("download");
-  var image = document
+  const download = document.getElementById("download");
+
+  const image = document
     .getElementById("canvas")
     .toDataURL("image/png")
     .replace("image/png", "image/octet-stream");
-  download.setAttribute("href", image);
-  download.setAttribute("download", "Poster.jpg");
+
+  downloadCount++;
+  localStorage.setItem("downloadCount", downloadCount);
+
+  download.href = image;
+  download.download = `Inspiro_Creates_${downloadCount}.png`;
 }
 
 // download button disaplay
