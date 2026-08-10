@@ -106,7 +106,7 @@ function draw() {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
   ctx.font = " 40px Roboto";
-  ctx.textAlign = "center";
+  ctx.textAlign = "center, 325/680";
   ctx.fillStyle = 'black';
 
   // Draw slice
@@ -124,7 +124,7 @@ function draw() {
 
   // Draw frame
   ctx.drawImage(document.getElementById("frame"), 0, 0);
-  ctx.fillText(document.getElementById("username").value, 223, 655);
+  ctx.fillText(document.getElementById("username").value, 150, 660);
 }
 
 // downlad function
