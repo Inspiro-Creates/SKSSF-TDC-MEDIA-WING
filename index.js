@@ -1,249 +1,556 @@
-
 // @ts-nocheck
-// console.log("coucou");
+
+// =====================================================
+// ELEMENTS
+// =====================================================
+
 const uploadedImageDiv = document.getElementById("uploadedImage");
 const fileUpload = document.getElementById("fileUpload");
-fileUpload.addEventListener("change", getImage, false);
-let cropper = null;
 const cropButton = document.getElementById("cropButton");
-cropButton.addEventListener("click", cropImage);
-let myGreatImage = null;
 const croppedImage = document.getElementById("croppedImage");
 
+let cropper = null;
+let myGreatImage = null;
+
+
+// =====================================================
+// FILE UPLOAD
+// =====================================================
+
+fileUpload.addEventListener("change", getImage, false);
+
 function getImage() {
-  console.log("images", this.files[0]);
-  const imageToProcess = this.files[0];
 
-  // display uploaded image
-  let newImg = new Image(imageToProcess.width, imageToProcess.height);
-  newImg.src = imageToProcess;
-  // newImg.height = "100";
-  // newImg.width = "100";
-  newImg.src = URL.createObjectURL(imageToProcess);
-  newImg.id = "myGreatImage";
-  // uploadedImageDiv.style.border = "4px solid #FCB514";
-  // uploadedImageDiv.innerHTML
-  uploadedImageDiv.style.width = " 250px";
-  uploadedImageDiv.style.height = "250px";
-  uploadedImageDiv.appendChild(newImg);
-  myGreatImage = document.getElementById("myGreatImage");
+    console.log("Image selected:", this.files[0]);
 
-  processImage();
+    const imageToProcess = this.files[0];
+
+    // Check if file exists
+    if (!imageToProcess) {
+        return;
+    }
+
+    // Remove previous image
+    uploadedImageDiv.innerHTML = "";
+
+    // Create new image
+    const newImg = new Image();
+
+    newImg.src = URL.createObjectURL(imageToProcess);
+
+    newImg.id = "myGreatImage";
+
+    // Container size
+    uploadedImageDiv.style.width = "250px";
+    uploadedImageDiv.style.height = "250px";
+
+    // Add image
+    uploadedImageDiv.appendChild(newImg);
+
+    myGreatImage = newImg;
+
+    // Wait until image is loaded
+    newImg.onload = function () {
+        processImage();
+    };
 }
+
+
+// =====================================================
+// CROPPER
+// =====================================================
 
 function processImage() {
-  cropButton.style.display = "block";
-  cropper = new Cropper(myGreatImage, {
-    // aspectRatio: 1.5,
-    // mouseWheelZoom: false,
-    // touchDragZomm:false,
-    // scrollwheel: false,
-    // navigationControl: false,
-    // mapTypeControl: false,
-    // scaleControl: false,
-    // draggable: false,   
-    // toggleDragModeOnDblclick: false,
-    // cropBoxMovable:false,
-    // cropBoxResizable:false,
-    // minCropBoxWidth:200,
-    // minCropBoxHeight:200,
-    //cropBoxMovable: false,
-    // minContainerHeight  : 300,
-    // minContainerWidth   : 300,
-    // minCanvasWidth      : 200,
-    // minCanvasHeight     : 200,
-    // maxCropBoxWidth     : 100,
-    // maxCropBoxHeight    : 100,
-    // maxContainerHeight  : 200,
-    // maxContainerWidth   : 200,
-    // maxCanvasWidth      : 200,
-    // maxCanvasHeight     : 200,
-    aspectRatio:  452/430,  
-    autoCropArea: 1,
-    background: true,
-    movable: false,
-    resizable: false,
-    checkOrientation: false,
-    // zoomOnTouch: false,
-    // zoomOnWheel: false,
-    resizable: false,
-    strict: false,
-    guides: true,
-    highlight: true,
-    dragCrop: false,
-    cropBoxResizable: true,
-    checkOrientation: true,
-    //cropBoxResizable: false,
-    // dragMode: "move",
-    // minCropBoxWidth: 100,
-    // minCropBoxHeight: 156,
-    viewMode: 2,
 
-    data: {
-      width: 1080,
-      height:1386,
-    },
-    crop(event) {
-      console.log(
-        Math.round(event.detail.width),
-        Math.round(event.detail.height)
-      );
-      const canvas = this.cropper.getCroppedCanvas();
-      croppedImage.src = canvas.toDataURL("image/png");
-    },
-  });
+    cropButton.style.display = "block";
+
+    // Destroy previous cropper if it exists
+    if (cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
+
+    cropper = new Cropper(myGreatImage, {
+
+        aspectRatio: 452 / 430,
+
+        autoCropArea: 1,
+
+        background: true,
+
+        movable: false,
+
+        resizable: false,
+
+        checkOrientation: true,
+
+        strict: false,
+
+        guides: true,
+
+        highlight: true,
+
+        dragCrop: false,
+
+        cropBoxResizable: true,
+
+        viewMode: 2,
+
+        data: {
+            width: 1080,
+            height: 1386
+        },
+
+        crop(event) {
+
+            console.log(
+                "Crop width:",
+                Math.round(event.detail.width),
+                "Crop height:",
+                Math.round(event.detail.height)
+            );
+
+            const canvas = this.cropper.getCroppedCanvas();
+
+            if (canvas) {
+                croppedImage.src = canvas.toDataURL("image/png");
+            }
+        }
+    });
 }
+
+
+// =====================================================
+// CROP BUTTON
+// =====================================================
+
+cropButton.addEventListener("click", cropImage);
 
 function cropImage() {
-  const imgurl = cropper.getCroppedCanvas().toDataURL();
-  const img = document.createElement("img");
-  img.src = imgurl;
-  document.getElementById("cropResult").appendChild(img);
-  draw();
+
+    if (!cropper) {
+        console.log("Cropper is not ready.");
+        return;
+    }
+
+    const croppedCanvas = cropper.getCroppedCanvas();
+
+    if (!croppedCanvas) {
+        console.log("Unable to create cropped canvas.");
+        return;
+    }
+
+    // Create cropped image
+    const imgurl = croppedCanvas.toDataURL("image/png");
+
+    const img = document.createElement("img");
+
+    img.src = imgurl;
+
+    // Add result image
+    const cropResult = document.getElementById("cropResult");
+
+    if (cropResult) {
+        cropResult.innerHTML = "";
+        cropResult.appendChild(img);
+    }
+
+    // Update canvas/poster
+    draw();
 }
 
+
+// =====================================================
+// DRAW FINAL POSTER
+// =====================================================
 
 function draw() {
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
 
-    ctx.font = "40px Roboto";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#ffffff";
+    const canvas = document.getElementById("canvas");
 
-    // Draw image
-    ctx.drawImage(
-        document.getElementById("croppedImage"),
-        90,
-        194,
-        452,
-        430
+    if (!canvas) {
+        console.log("Canvas element not found.");
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+        console.log("Canvas context not found.");
+        return;
+    }
+
+
+    // -------------------------------------------------
+    // CLEAR CANVAS
+    // -------------------------------------------------
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
     );
 
-    // Draw frame
-    ctx.drawImage(document.getElementById("frame"), 0, 0);
 
-    // Username
-    const username = document.getElementById("username").value.trim();
+    // -------------------------------------------------
+    // TEXT SETTINGS
+    // -------------------------------------------------
 
-    if (username.length >= 10 && username.length <= 15) {
+    ctx.font = "40px Roboto";
 
-        // Find the nearest space around the middle
-        let middle = Math.floor(username.length / 2);
-        let leftSpace = username.lastIndexOf(" ", middle);
-        let rightSpace = username.indexOf(" ", middle);
+    ctx.textAlign = "center";
 
-        let splitPosition;
+    ctx.textBaseline = "middle";
 
-        if (leftSpace === -1) {
-            splitPosition = rightSpace;
-        } else if (rightSpace === -1) {
-            splitPosition = leftSpace;
-        } else {
-            // Choose the closest space
-            splitPosition =
-                (middle - leftSpace <= rightSpace - middle)
-                    ? leftSpace
-                    : rightSpace;
-        }
+    ctx.fillStyle = "#ffffff";
 
-        if (splitPosition > 0) {
-            const firstLine = username.substring(0, splitPosition).trim();
-            const secondLine = username.substring(splitPosition).trim();
 
-            ctx.fillText(firstLine, 145, 665);
-            ctx.fillText(secondLine, 145, 710);
-        } else {
-            ctx.fillText(username, 145, 690);
-        }
+    // -------------------------------------------------
+    // DRAW CROPPED IMAGE
+    // -------------------------------------------------
+
+    const croppedImg = document.getElementById("croppedImage");
+
+    if (croppedImg && croppedImg.src) {
+
+        ctx.drawImage(
+            croppedImg,
+            90,
+            194,
+            452,
+            430
+        );
+    }
+
+
+    // -------------------------------------------------
+    // DRAW FRAME
+    // -------------------------------------------------
+
+    const frame = document.getElementById("frame");
+
+    if (frame) {
+
+        ctx.drawImage(
+            frame,
+            0,
+            0
+        );
+    }
+
+
+    // -------------------------------------------------
+    // USERNAME
+    // -------------------------------------------------
+
+    const usernameElement =
+        document.getElementById("username");
+
+    if (!usernameElement) {
+        return;
+    }
+
+    const username =
+        usernameElement.value.trim();
+
+
+    if (!username) {
+        return;
+    }
+
+
+    // =================================================
+    // USERNAME LINE LOGIC
+    // =================================================
+
+    /*
+        1 - 9 characters
+        ----------------
+        One line
+
+        10 - 15 characters
+        ------------------
+        Split at nearest space
+
+        16+ characters
+        ---------------
+        Split at nearest space
+
+        If there is no space:
+        Keep one line.
+    */
+
+
+    if (username.length < 10) {
+
+        // ---------------------------------------------
+        // ONE LINE
+        // ---------------------------------------------
+
+        ctx.fillText(
+            username,
+            145,
+            690
+        );
 
     } else {
-        ctx.fillText(username, 145, 690);
+
+        // ---------------------------------------------
+        // FIND SPACE NEAR MIDDLE
+        // ---------------------------------------------
+
+        const middle =
+            Math.floor(username.length / 2);
+
+        const leftSpace =
+            username.lastIndexOf(" ", middle);
+
+        const rightSpace =
+            username.indexOf(" ", middle);
+
+        let splitPosition = -1;
+
+
+        // Space only on right
+        if (
+            leftSpace === -1 &&
+            rightSpace !== -1
+        ) {
+
+            splitPosition = rightSpace;
+        }
+
+
+        // Space only on left
+        else if (
+            rightSpace === -1 &&
+            leftSpace !== -1
+        ) {
+
+            splitPosition = leftSpace;
+        }
+
+
+        // Spaces on both sides
+        else if (
+            leftSpace !== -1 &&
+            rightSpace !== -1
+        ) {
+
+            const leftDistance =
+                middle - leftSpace;
+
+            const rightDistance =
+                rightSpace - middle;
+
+
+            if (leftDistance <= rightDistance) {
+
+                splitPosition = leftSpace;
+
+            } else {
+
+                splitPosition = rightSpace;
+            }
+        }
+
+
+        // ---------------------------------------------
+        // TWO LINE TEXT
+        // ---------------------------------------------
+
+        if (splitPosition > 0) {
+
+            const firstLine =
+                username
+                    .substring(0, splitPosition)
+                    .trim();
+
+            const secondLine =
+                username
+                    .substring(splitPosition)
+                    .trim();
+
+
+            // First line
+            ctx.fillText(
+                firstLine,
+                145,
+                665
+            );
+
+
+            // Second line
+            ctx.fillText(
+                secondLine,
+                145,
+                710
+            );
+
+        }
+
+
+        // ---------------------------------------------
+        // NO SPACE FOUND
+        // ---------------------------------------------
+
+        else {
+
+            ctx.fillText(
+                username,
+                145,
+                690
+            );
+        }
     }
 }
-  // Draw slice
-  ctx.drawImage(
-    document.getElementById("croppedImage"),
-   90,
-    194,
-    452,
-    430
-    // 900,
-    // 0,
-    // 900,
-    // 900
-  );
 
-  // Draw frame
-  ctx.drawImage(document.getElementById("frame"), 0, 0);
-  ctx.fillText(document.getElementById("username").value, 145, 690);
-}
 
-// downlad function
+// =====================================================
+// DOWNLOAD
+// =====================================================
 
-let downloadCount = Number(localStorage.getItem("downloadCount")) || 0;
+let downloadCount =
+    Number(
+        localStorage.getItem("downloadCount")
+    ) || 0;
+
 
 function download() {
-  const download = document.getElementById("download");
 
-  const image = document
-    .getElementById("canvas")
-    .toDataURL("image/png")
-    .replace("image/png", "image/octet-stream");
+    const downloadButton =
+        document.getElementById("download");
 
-  downloadCount++;
-  localStorage.setItem("downloadCount", downloadCount);
+    const canvas =
+        document.getElementById("canvas");
 
-  download.href = image;
-  download.download = `Inspiro_Creates_${downloadCount}.png`;
+
+    if (!canvas || !downloadButton) {
+        return;
+    }
+
+
+    const image =
+        canvas
+            .toDataURL("image/png")
+            .replace(
+                "image/png",
+                "image/octet-stream"
+            );
+
+
+    downloadCount++;
+
+    localStorage.setItem(
+        "downloadCount",
+        downloadCount
+    );
+
+
+    downloadButton.href = image;
+
+    downloadButton.download =
+        `Inspiro_Creates_${downloadCount}.png`;
 }
 
-// download button disaplay
+
+// =====================================================
+// SHOW DOWNLOAD BUTTON
+// =====================================================
 
 $(function () {
-  $("#cropButton").on("click", function () {
-    $("#download").show();
-  });
+
+    $("#cropButton").on("click", function () {
+
+        $("#download").show();
+
+    });
+
 });
 
 
- // poster create button hide
+// =====================================================
+// POSTER SHOW / HIDE
+// =====================================================
 
- const toggleBtn = document.querySelector("#cropButton");
- const divList = document.querySelector("#poster");
- 
- // action to be taken when clicked on hide list button
- toggleBtn.addEventListener("click", () => {
-   if (divList.style.display === "none") {
-     divList.style.display = "block";
-     toggleBtn.innerHTML = "Hide List";
-   } else {
-     divList.style.display = "none";
-     toggleBtn.innerHTML = "Show List";
-   }
- });
+const toggleBtn =
+    document.querySelector("#cropButton");
+
+const divList =
+    document.querySelector("#poster");
 
 
-// username hide 
+if (toggleBtn && divList) {
+
+    toggleBtn.addEventListener(
+        "click",
+        function () {
+
+            if (
+                divList.style.display === "none"
+            ) {
+
+                divList.style.display = "block";
+
+                toggleBtn.innerHTML =
+                    "Hide List";
+
+            } else {
+
+                divList.style.display = "none";
+
+                toggleBtn.innerHTML =
+                    "Show List";
+            }
+        }
+    );
+}
 
 
- $(document).ready(function () {
-  $("#cropButton").click(function () {
-    $("#poster1").hide();
-  });
+// =====================================================
+// HIDE USERNAME / POSTER1
+// =====================================================
+
+$(document).ready(function () {
+
+    $("#cropButton").click(function () {
+
+        $("#poster1").hide();
+
+    });
+
 });
 
 
-// close button
+// =====================================================
+// CLOSE BUTTON - X
+// =====================================================
 
-$('#x').click(function () {
-  location.reload();
+$("#x").click(function () {
+
+    location.reload();
+
 });
-// close button
-$('#close').click(function () {
-  location.reload();
+
+
+// =====================================================
+// CLOSE BUTTON
+// =====================================================
+
+$("#close").click(function () {
+
+    location.reload();
+
 });
-// close button
-$('#download').click(function () {
-  location.reload();
+
+
+// =====================================================
+// DOWNLOAD BUTTON
+// =====================================================
+
+$("#download").click(function () {
+
+    location.reload();
+
 });
