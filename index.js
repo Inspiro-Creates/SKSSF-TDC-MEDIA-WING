@@ -197,7 +197,7 @@ function draw() {
     // TEXT SETTINGS
     // -------------------------------------------------
 
-    ctx.font = "40px Roboto";
+    ctx.font = "40px AnekMalayalam_SemiCondensed-SemiBold";
 
     ctx.textAlign = "center", 345/690;
 
