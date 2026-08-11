@@ -197,7 +197,7 @@ function draw() {
     // TEXT SETTINGS
     // -------------------------------------------------
 
-    ctx.font = "40px AnekMalayalam_SemiCondensed-SemiBold,fonts/icomoon/fonts/AnekMalayalam_SemiCondensed-SemiBold.ttf ";
+    ctx.font = "40px 'Anek Malayalam' ";
 
     ctx.textAlign = "center", 330/690;
 
