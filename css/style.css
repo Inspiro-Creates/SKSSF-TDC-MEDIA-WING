@@ -1,6 +1,6 @@
 body {
-  font-family: "'Anek Malayalam'", sans-serif;
-  font-family: ''Anek Malayalam'', sans-serif;
+  font-family: "Anek Malayalam", sans-serif;
+  font-family: 'Anek Malayalam', sans-serif;
   /* background-color: #f8fafb;  */
   background: linear-gradient(-45deg, #1c3954, #0a2745);
 }
@@ -16,7 +16,7 @@ p {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Roboto", sans-serif; }
+  font-family: "Anek Malayalam", sans-serif; }
 
 a {
   -webkit-transition: .3s all ease;
