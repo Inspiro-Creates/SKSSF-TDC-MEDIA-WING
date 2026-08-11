@@ -8,8 +8,40 @@ body {
   background-image: linear-gradient(to right, #0a2745, #1c3954);
   box-shadow: 0 4px 15px 0 #0a2745;
 }
+.malayalam-text {
+    font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 500;
+    line-height: 1.4;
+}
+.anek-thin {
+    font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 100;
+}
 
+.anek-regular {
+    font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 400;
+}
 
+.anek-medium {
+    font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 500;
+}
+
+.anek-semibold {
+    font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 600;
+}
+
+.anek-bold {
+    font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 700;
+}
+
+.anek-extrabold {
+    font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 800;
+}
 p {
   color: #b3b3b3;
   font-weight: 300; }
