@@ -199,7 +199,7 @@ function draw() {
 
     ctx.font = "40px Roboto";
 
-    ctx.textAlign = "center", 360/690;
+    ctx.textAlign = "center", 345/690;
 
     ctx.textBaseline = "middle";
 
@@ -290,7 +290,7 @@ function draw() {
 
         ctx.fillText(
             username,
-            360,
+            345,
             690
         );
 
@@ -384,7 +384,7 @@ function draw() {
             // Second line
             ctx.fillText(
                 secondLine,
-                360,
+                345,
                 710
             );
 
@@ -399,7 +399,7 @@ function draw() {
 
             ctx.fillText(
                 username,
-                360,
+                345,
                 690
             );
         }
