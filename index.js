@@ -197,9 +197,9 @@ function draw() {
     // TEXT SETTINGS
     // -------------------------------------------------
 
-    ctx.font = "40px AnekMalayalam_SemiCondensed-SemiBold";
+    ctx.font = "40px AnekMalayalam_SemiCondensed-SemiBold,fonts/icomoon/fonts/AnekMalayalam_SemiCondensed-SemiBold.ttf ";
 
-    ctx.textAlign = "center", 345/690;
+    ctx.textAlign = "center", 330/690;
 
     ctx.textBaseline = "middle";
 
@@ -376,7 +376,7 @@ function draw() {
             // First line
             ctx.fillText(
                 firstLine,
-                360,
+                330,
                 665
             );
 
@@ -384,7 +384,7 @@ function draw() {
             // Second line
             ctx.fillText(
                 secondLine,
-                345,
+                330,
                 710
             );
 
@@ -399,7 +399,7 @@ function draw() {
 
             ctx.fillText(
                 username,
-                345,
+                330,
                 690
             );
         }
