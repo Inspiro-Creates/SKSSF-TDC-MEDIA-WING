@@ -199,7 +199,7 @@ function draw() {
 
     ctx.font = "40px Roboto";
 
-    ctx.textAlign = "center";
+    ctx.textAlign = "center", 145/690;
 
     ctx.textBaseline = "middle";
 
