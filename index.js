@@ -197,8 +197,10 @@ function draw() {
     // TEXT SETTINGS
     // -------------------------------------------------
 
-    ctx.font = "40px 'Anek Malayalam' ";
-
+    ctx.font = "40px 'anek-semibold' ";
+    ctx.font-family: 'Anek Malayalam', sans-serif;
+    font-weight: 600;
+}
     ctx.textAlign = "center", 330/690;
 
     ctx.textBaseline = "middle";
